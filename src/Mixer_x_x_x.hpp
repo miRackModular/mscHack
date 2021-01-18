@@ -204,15 +204,15 @@ struct Mixer_ : Module
         Mixer_ *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (Mixer_*)paramQuantity->module;
+            mymodule = (Mixer_*)module;
 
             if( mymodule )
             {
-                param = paramQuantity->paramId - Mixer_::PARAM_CHEQHI;
+                param = paramId - Mixer_::PARAM_CHEQHI;
 
-                mymodule->m_hpIn[ param ] = paramQuantity->getValue(); 
+                mymodule->m_hpIn[ param ] = getValue(); 
             }
 
 		    RoundKnob::onChange( e );
@@ -227,14 +227,14 @@ struct Mixer_ : Module
         Mixer_ *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (Mixer_*)paramQuantity->module;
+            mymodule = (Mixer_*)module;
 
             if( mymodule )
             {
-                param = paramQuantity->paramId - Mixer_::PARAM_CHEQMD;
-                mymodule->m_mpIn[ param ] = paramQuantity->getValue(); 
+                param = paramId - Mixer_::PARAM_CHEQMD;
+                mymodule->m_mpIn[ param ] = getValue(); 
             }
 
 		    RoundKnob::onChange( e );
@@ -249,14 +249,14 @@ struct Mixer_ : Module
         Mixer_ *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (Mixer_*)paramQuantity->module;
+            mymodule = (Mixer_*)module;
 
             if( mymodule )
             {
-                param = paramQuantity->paramId - Mixer_::PARAM_CHEQLO;
-                mymodule->m_lpIn[ param ] = paramQuantity->getValue(); 
+                param = paramId - Mixer_::PARAM_CHEQLO;
+                mymodule->m_lpIn[ param ] = getValue(); 
             }
 
 		    RoundKnob::onChange( e );
@@ -327,7 +327,7 @@ struct _GroupPreMute : MenuItem
 {
     Mixer_ *menumod;
 
-    void onAction(const event::Action &e) override 
+    void onAction(event::Action &e) override 
     {
         menumod->m_bGroupPreMute = !menumod->m_bGroupPreMute;
     }
@@ -342,7 +342,7 @@ struct _Gainx2 : MenuItem
 {
     Mixer_ *menumod;
 
-    void onAction(const event::Action &e) override 
+    void onAction(event::Action &e) override 
     {
         menumod->m_bGainLevelx2 = !menumod->m_bGainLevelx2;
     }
@@ -357,7 +357,7 @@ struct _AuxIgnoreSolo : MenuItem
 {
     Mixer_ *menumod;
 
-    void onAction(const event::Action &e) override
+    void onAction(event::Action &e) override
     {
         menumod->m_bAuxIgnoreSolo = !menumod->m_bAuxIgnoreSolo;
 
@@ -613,22 +613,22 @@ void appendContextMenu(Menu *menu) override
     assert(mod);
 
 #if nGROUPS > 0
-    menu->addChild( createMenuLabel( "---- Group Outputs ----" ));
+    menu->addChild( createMenuLabel( "Group Outputs"));
 
     _GroupPreMute *pMergeItem1 = createMenuItem<_GroupPreMute>("Pre-Mute");
     pMergeItem1->menumod = mod;
     menu->addChild(pMergeItem1);
 #endif
 
-    menu->addChild( createMenuLabel( "---- Level Sliders ----" ));
+    menu->addChild( createMenuLabel( "Level Sliders" ));
 
     _Gainx2 *pMergeItem2 = createMenuItem<_Gainx2>("Gain x1.5");
     pMergeItem2->menumod = mod;
     menu->addChild(pMergeItem2);
 
-    menu->addChild( createMenuLabel( "---- Aux Output ----" ));
+    menu->addChild( createMenuLabel( "Aux Output" ));
 
-    _AuxIgnoreSolo *pMergeItem3 = createMenuItem<_AuxIgnoreSolo>("Do Not Mute when SOLOing");
+    _AuxIgnoreSolo *pMergeItem3 = createMenuItem<_AuxIgnoreSolo>("Do not mute when SOLOing");
     pMergeItem3->menumod = mod;
     menu->addChild(pMergeItem3);
 }

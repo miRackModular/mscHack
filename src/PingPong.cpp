@@ -147,13 +147,13 @@ struct MyCutoffKnob : Knob_Green1_40
 {
     PingPong *mymodule;
 
-    void onChange( const event::Change &e ) override 
+    void onChange( event::Change &e ) override 
     {
-        mymodule = (PingPong*)paramQuantity->module;
+        mymodule = (PingPong*)module;
 
         if( mymodule )
         {
-            mymodule->ChangeFilterCutoff( paramQuantity->getValue() ); 
+            mymodule->ChangeFilterCutoff( getValue() ); 
         }
 
 		RoundKnob::onChange( e );

@@ -48,7 +48,7 @@ struct OSC_WaveMorph_3 : Module
         config(nPARAMS, nINPUTS, nOUTPUTS, nLIGHTS);
 
         configParam( PARAM_BAND, 0.0, 0.8, 0.333, "Draw Rubber Banding" );
-        configParam( PARAM_LEVEL, 0.0, 1.0, 0.0, "Level Out" );
+        configParam( PARAM_LEVEL, 0.0, 1.0, 0.5, "Level Out" );
         configParam( PARAM_CUTOFF, 0.0, 0.1, 0.0, "Filter Cutoff" );
         configParam( PARAM_RES, 0.0, 1.0, 0.0, "Filter Resonance" );
         configParam( PARAM_FILTER_MODE, 0.0, 4.0, 0.0, "Filter Mode" );
@@ -100,12 +100,12 @@ struct OSC_WaveMorph_3 : Module
         OSC_WaveMorph_3 *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (OSC_WaveMorph_3*)paramQuantity->module;
+            mymodule = (OSC_WaveMorph_3*)module;
 
             if( mymodule )
-                mymodule->m_pEnvelope->m_fband = paramQuantity->getValue(); 
+                mymodule->m_pEnvelope->m_fband = getValue(); 
 
 		    RoundKnob::onChange( e );
 	    }
@@ -384,9 +384,12 @@ void OSC_WaveMorph_3::dataFromJson( json_t *root )
 //-----------------------------------------------------
 void OSC_WaveMorph_3::onReset()
 {
-    memset( m_GraphData, 0, sizeof( m_GraphData ) );
+    int ch;
 
-    m_pEnvelope->setDataAll( (int*)m_GraphData );
+    for( ch = 0; ch < nCHANNELS; ch++ )
+    {
+        m_pEnvelope->resetValAll(ch, 0.5);
+    }
 
     ChangeChannel( 0 );
 }
@@ -558,7 +561,7 @@ void OSC_WaveMorph_3::process(const ProcessArgs &args)
     // process each channel
     for( ch = 0; ch < nCHANNELS; ch++ )
     {
-        m_pEnvelope->m_EnvData[ ch ].m_Clock.syncInc = 32.7032f * clamp( powf( 2.0f, clamp( inputs[ INPUT_VOCT ].getNormalVoltage( 4.0f ), 0.0f, VOCT_MAX ) ), 0.0f, 4186.01f );
+        m_pEnvelope->m_EnvData[ ch ].m_Clock.syncInc = 32.7032f * clamp( powf( 2.0f, clamp( inputs[ INPUT_VOCT ].getNormalVoltage( 3.0f ), 0.0f, VOCT_MAX ) ), 0.0f, 4186.01f );
 
         if( m_bSolo && ch == m_CurrentChannel )
             fout += m_pEnvelope->procStep( ch, false, false );
@@ -570,11 +573,11 @@ void OSC_WaveMorph_3::process(const ProcessArgs &args)
     ChangeFilterCutoff( cutoff );
 
     flevel = clamp( params[ PARAM_LEVEL ].getValue() * ( inputs[ IN_LEVEL ].getNormalVoltage( CV_MAX10 ) / CV_MAX10 ), 0.0f, 1.0f );
-    fout *= flevel * AUDIO_MAX;
+    fout *= flevel;
 
     Filter( &fout );
 
-    outputs[ OUTPUT_AUDIO ].setVoltage( fout );
+    outputs[ OUTPUT_AUDIO ].setVoltage( clamp( fout, -AUDIO_MAX, AUDIO_MAX ) );
 }
 
 Model *modelOSC_WaveMorph_3 = createModel<OSC_WaveMorph_3, OSC_WaveMorph_3_Widget>( "OSC_WaveMorph_3" );

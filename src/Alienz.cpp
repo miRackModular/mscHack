@@ -138,19 +138,19 @@ struct Alienz : Module
             set( DWRGB( 255, 255, 0 ), DWRGB( 0, 0, 0 ), 13.0f );
         }
 
-        void onChange( const event::Change &e ) override
+        void onChange( event::Change &e ) override
         {
             Alienz *mymodule;
             char strVal[ 10 ] = {};
 
             MSCH_Widget_Knob1::onChange( e );
 
-            mymodule = (Alienz*)paramQuantity->module;
+            mymodule = (Alienz*)module;
 
             if( !mymodule )
                 return;
 
-            sprintf( strVal, "x%.2f", mymodule->speeds[ (int)paramQuantity->getValue() ] );
+            sprintf( strVal, "x%.2f", mymodule->speeds[ (int)getValue() ] );
             mymodule->m_pTextLabel2->text = strVal;
         }
     };
@@ -257,8 +257,6 @@ Alienz_Widget( Alienz *module )
 		}
 	}
 
-	addParam(createParam<Alienz::MySpeed_Knob>( Vec( 10, 280 ), module, Alienz::PARAM_SPEED ) );
-
     pmod->m_pTextLabel2 = new Label();
     pmod->m_pTextLabel2->box.pos = Vec( 30, 280 );
     pmod->m_pTextLabel2->text = "x1.00";
@@ -271,6 +269,8 @@ Alienz_Widget( Alienz *module )
 
     addChild(createWidget<ScrewSilver>(Vec(30, 0)));
     addChild(createWidget<ScrewSilver>(Vec(30, 365)));
+	
+	addParam(createParam<Alienz::MySpeed_Knob>( Vec( 10, 280 ), module, Alienz::PARAM_SPEED ) );
 
     if( module )
     {

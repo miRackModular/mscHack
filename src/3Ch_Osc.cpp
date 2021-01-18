@@ -163,14 +163,14 @@ struct Osc_3Ch : Module
         Osc_3Ch *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (Osc_3Ch*)paramQuantity->module;
+            mymodule = (Osc_3Ch*)module;
 
             if( mymodule )
             {
-                param = paramQuantity->paramId - Osc_3Ch::PARAM_nWAVES;
-                mymodule->m_nWaves[ param ] = (int)( paramQuantity->getValue() ); 
+                param = paramId - Osc_3Ch::PARAM_nWAVES;
+                mymodule->m_nWaves[ param ] = (int)( getValue() ); 
             }
 
 		    RoundKnob::onChange( e );
@@ -185,15 +185,15 @@ struct Osc_3Ch : Module
         Osc_3Ch *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (Osc_3Ch*)paramQuantity->module;
+            mymodule = (Osc_3Ch*)module;
 
             if( mymodule )
             {
-                param = paramQuantity->paramId - Osc_3Ch::PARAM_DETUNE;
+                param = paramId - Osc_3Ch::PARAM_DETUNE;
 
-                mymodule->m_DetuneIn[ param ] = paramQuantity->getValue();
+                mymodule->m_DetuneIn[ param ] = getValue();
                 mymodule->CalcDetune( param );
             }
 
@@ -209,15 +209,15 @@ struct Osc_3Ch : Module
         Osc_3Ch *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (Osc_3Ch*)paramQuantity->module;
+            mymodule = (Osc_3Ch*)module;
 
             if( mymodule )
             {
-                param = paramQuantity->paramId - Osc_3Ch::PARAM_SPREAD;
+                param = paramId - Osc_3Ch::PARAM_SPREAD;
 
-                mymodule->m_SpreadIn[ param ] = paramQuantity->getValue();
+                mymodule->m_SpreadIn[ param ] = getValue();
                 mymodule->CalcSpread( param );
             }
 

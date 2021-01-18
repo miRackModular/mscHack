@@ -363,15 +363,15 @@ void Widget_EnvelopeEdit::draw(const DrawArgs &args)
 //-----------------------------------------------------
 // Procedure:   onMouseDown
 //-----------------------------------------------------
-void Widget_EnvelopeEdit::onButton(const event::Button &e)
+void Widget_EnvelopeEdit::onMouseDown(event::MouseDown &e)
 {
     int index;
 
-    OpaqueWidget::onButton( e );
+    OpaqueWidget::onMouseDown( e );
 
     m_bCtrl = false;
 
-    if( !m_bInitialized || e.action != GLFW_PRESS )
+    if( !m_bInitialized )
         return;
 
     e.consume( this );
@@ -379,8 +379,8 @@ void Widget_EnvelopeEdit::onButton(const event::Button &e)
     m_Dragy = e.pos.y;
     m_Dragx = e.pos.x;
 
-    if( e.mods & GLFW_MOD_CONTROL )
-        m_bCtrl = true;
+    // if( e.mods & GLFW_MOD_CONTROL )
+    //     m_bCtrl = true;
 
     if( e.button == GLFW_MOUSE_BUTTON_LEFT )
     {
@@ -404,23 +404,23 @@ void Widget_EnvelopeEdit::onButton(const event::Button &e)
 //-----------------------------------------------------
 // Procedure:   onDragStart
 //-----------------------------------------------------
-void Widget_EnvelopeEdit::onDragStart(const event::DragStart &e)
+void Widget_EnvelopeEdit::onDragStart(event::DragStart &e)
 {
-    if( e.button == GLFW_MOUSE_BUTTON_LEFT && !m_bDraw )
-        m_EnvData[ m_currentChannel ].m_HandleVal[ m_Dragi ] = 1.0f - clamp( ( m_Dragy / box.size.y ), 0.0f, 1.0f );
+    // if( !m_bDraw )
+    //     m_EnvData[ m_currentChannel ].m_HandleVal[ m_Dragi ] = 1.0f - clamp( ( m_Dragy / box.size.y ), 0.0f, 1.0f );
 }
 
 //-----------------------------------------------------
 // Procedure:   onDragEnd
 //-----------------------------------------------------
-void Widget_EnvelopeEdit::onDragEnd(const event::DragEnd &e)
+void Widget_EnvelopeEdit::onDragEnd(event::DragEnd &e)
 {
 }
 
 //-----------------------------------------------------
 // Procedure:   onDragMove
 //-----------------------------------------------------
-void Widget_EnvelopeEdit::onDragMove(const event::DragMove &e)
+void Widget_EnvelopeEdit::onDragMove(event::DragMove &e)
 {
     int h, i;
     float fband;
@@ -435,7 +435,7 @@ void Widget_EnvelopeEdit::onDragMove(const event::DragMove &e)
     if( !m_bDraw )
     {
 	    // Drag slower if Mod is held
-	    if ( m_bCtrl )
+	    if ( api0::windowIsFineMode() )
         {
             delta = 0.0001f * e.mouseDelta.y;
             m_EnvData[ m_currentChannel ].m_HandleVal[ m_Dragi ] = clamp( m_EnvData[ m_currentChannel ].m_HandleVal[ m_Dragi ] - delta, 0.0f, 1.0f );
@@ -493,10 +493,10 @@ void Widget_EnvelopeEdit::onDragMove(const event::DragMove &e)
     {
         i = clamp( ( ( m_Dragx + (m_divw / 2.0f) ) / box.size.x ) * (float)ENVELOPE_DIVISIONS, 0.0f, (float)ENVELOPE_DIVISIONS );
 
-        if( e.button == GLFW_MOUSE_BUTTON_LEFT )
+        // if( e.button == GLFW_MOUSE_BUTTON_LEFT )
             m_EnvData[ m_currentChannel ].m_HandleVal[ i ] = clamp( 1.0 - ( m_Dragy / box.size.y ), 0.0f, 1.0f );
-        else
-            m_EnvData[ m_currentChannel ].m_HandleVal[ i ] = 0.5f;
+        // else
+            // m_EnvData[ m_currentChannel ].m_HandleVal[ i ] = 0.5f;
 
         if( m_pCallback && m_pClass )
             m_pCallback( m_pClass, m_EnvData[ m_currentChannel ].getActualVal( m_EnvData[ m_currentChannel ].m_HandleVal[ i ] ) );

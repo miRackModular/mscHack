@@ -63,7 +63,7 @@ struct MSCH_Widget_Knob1 : Knob
         nvgStroke( args.vg );
     }
 
-    void onChange(const event::Change &e) override
+    void onChange(event::Change &e) override
     {
         if( !m_bInitialized )
             return;
@@ -71,17 +71,17 @@ struct MSCH_Widget_Knob1 : Knob
         // Re-transform the widget::TransformWidget
         float val;
 
-        if (paramQuantity) 
+        // if (paramQuantity) 
         {
-            val = paramQuantity->getValue();
+            val = getValue();
 
             if( Knob::snap )
                 val = (float)( (int)val );
 
-            m_fRat = 1.0f / ( paramQuantity->maxValue - paramQuantity->minValue );
-            m_fVal = m_fRat * ( val - paramQuantity->minValue );
+            m_fRat = 1.0f / ( maxValue - minValue );
+            m_fVal = m_fRat * ( val - minValue );
 
-            fb->dirty = true;
+            // fb->dirty = true;
         }
 
         Knob::onChange(e);

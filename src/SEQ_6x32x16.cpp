@@ -1,4 +1,4 @@
-﻿#include "mscHack.hpp"
+#include "mscHack.hpp"
 
 #define nCHANNELS 6
 #define nSTEPS 32
@@ -109,6 +109,8 @@ struct SEQ_6x32x16 : Module
             configParam( PARAM_LVL4_KNOB + i, 0.0, 1.0, 0.75, "Level Med Hi" );
             configParam( PARAM_LVL5_KNOB + i, 0.0, 1.0, 0.9 , "Level Hi" );
         }
+		
+		sprintf( m_strRange, "%.0fV", m_fCVRanges[ m_RangeSelect ] );
     }
 
     // Overrides 
@@ -265,14 +267,14 @@ struct SEQ_6x32x16_CVRange : MenuItem
 {
     SEQ_6x32x16 *menumod;
 
-    void onAction(const event::Action &e) override 
+    void onAction(event::Action &e) override 
     {
         menumod->m_RangeSelect++;
 
         if( menumod->m_RangeSelect > 2 )
             menumod->m_RangeSelect = 0;
 
-        sprintf( menumod->m_strRange, "%.1fV", menumod->m_fCVRanges[ menumod->m_RangeSelect ] );
+        sprintf( menumod->m_strRange, "%.0fV", menumod->m_fCVRanges[ menumod->m_RangeSelect ] );
     }
 
     void step() override 
@@ -407,9 +409,9 @@ void appendContextMenu(Menu *menu) override
     SEQ_6x32x16 *mod = dynamic_cast<SEQ_6x32x16*>(module);
     assert(mod);
 
-    menu->addChild( createMenuLabel( "---- CV Output Level ----" ));
+    menu->addChild( createMenuLabel( "CV Output Level" ));
 
-    SEQ_6x32x16_CVRange *pMergeItem1 = createMenuItem<SEQ_6x32x16_CVRange>("VRange (15, 10, 5):");
+    SEQ_6x32x16_CVRange *pMergeItem1 = createMenuItem<SEQ_6x32x16_CVRange>("VRange (15/10/5V)", "15V");
     pMergeItem1->menumod = mod;
     menu->addChild(pMergeItem1);
 }
@@ -475,7 +477,7 @@ void SEQ_6x32x16::dataFromJson( json_t *root )
 	if( m_bTrigMute )
 		m_pButtonTrigMute->Set( m_bTrigMute );
 
-    sprintf( m_strRange, "%.1fV", m_fCVRanges[ m_RangeSelect ] );
+    sprintf( m_strRange, "%.0fV", m_fCVRanges[ m_RangeSelect ] );
 }
 
 //-----------------------------------------------------

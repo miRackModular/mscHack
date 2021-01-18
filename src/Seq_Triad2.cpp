@@ -251,8 +251,8 @@ void Seq_Triad2_Widget_NoteChangeCallback ( void *pClass, int kb, int notepresse
     // right click advance step
     if( button == 1 )
     {
-    	if( mod & GLFW_MOD_CONTROL )
-    		bCtrl = true;
+    	// if( mod & GLFW_MOD_CONTROL )
+    	// 	bCtrl = true;
 
         mymodule->ChangeStep( kb, mymodule->m_CurrentStep[ kb ] + 1, true, false );
 
@@ -350,7 +350,7 @@ struct Seq_Triad2_Ch1Reset : MenuItem
 {
     Seq_Triad2 *menumod;
 
-    void onAction(const event::Action &e) override 
+    void onAction(event::Action &e) override 
     {
         menumod->m_bResetToPattern1[ 0 ] = !menumod->m_bResetToPattern1[ 0 ];
     }
@@ -365,7 +365,7 @@ struct Seq_Triad2_Ch2Reset : MenuItem
 {
     Seq_Triad2 *menumod;
 
-    void onAction(const event::Action &e) override 
+    void onAction(event::Action &e) override 
     {
         menumod->m_bResetToPattern1[ 1 ] = !menumod->m_bResetToPattern1[ 1 ];
     }
@@ -380,7 +380,7 @@ struct Seq_Triad2_Ch3Reset : MenuItem
 {
     Seq_Triad2 *menumod;
 
-    void onAction(const event::Action &e) override 
+    void onAction(event::Action &e) override 
     {
         menumod->m_bResetToPattern1[ 2 ] = !menumod->m_bResetToPattern1[ 2 ];
     }
@@ -511,17 +511,17 @@ void appendContextMenu(Menu *menu) override
     Seq_Triad2 *mod = dynamic_cast<Seq_Triad2*>(module);
     assert(mod);
 
-    menu->addChild( createMenuLabel( "---- on CLK Reset ----" ));
+    menu->addChild( createMenuLabel( "On CLK Reset" ));
 
-    Seq_Triad2_Ch1Reset *pMergeItem1 = createMenuItem<Seq_Triad2_Ch1Reset>("Ch 1: Reset Pattern to 1");
+    Seq_Triad2_Ch1Reset *pMergeItem1 = createMenuItem<Seq_Triad2_Ch1Reset>("Reset CH 1 Pattern");
     pMergeItem1->menumod = mod;
     menu->addChild(pMergeItem1);
 
-    Seq_Triad2_Ch2Reset *pMergeItem2 = createMenuItem<Seq_Triad2_Ch2Reset>("Ch 2: Reset Pattern to 1");
+    Seq_Triad2_Ch2Reset *pMergeItem2 = createMenuItem<Seq_Triad2_Ch2Reset>("Reset CH 2 Pattern");
     pMergeItem2->menumod = mod;
     menu->addChild(pMergeItem2);
 
-    Seq_Triad2_Ch3Reset *pMergeItem3 = createMenuItem<Seq_Triad2_Ch3Reset>("Ch 3: Reset Pattern to 1");
+    Seq_Triad2_Ch3Reset *pMergeItem3 = createMenuItem<Seq_Triad2_Ch3Reset>("Reset CH 3 Pattern");
     pMergeItem3->menumod = mod;
     menu->addChild(pMergeItem3);
 }

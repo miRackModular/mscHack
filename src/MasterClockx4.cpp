@@ -97,13 +97,13 @@ struct MasterClockx4 : Module
             set( DWRGB( 188, 175, 167 ), DWRGB( 0, 0, 0 ), 13.0f );
         }
 
-        void onChange( const event::Change &e ) override
+        void onChange( event::Change &e ) override
         {
             MasterClockx4 *mymodule;
 
             MSCH_Widget_Knob1::onChange( e );
 
-            mymodule = (MasterClockx4*)paramQuantity->module;
+            mymodule = (MasterClockx4*)module;
 
             if( !mymodule )
                 return;
@@ -123,19 +123,19 @@ struct MasterClockx4 : Module
             set( DWRGB( 188, 175, 167 ), DWRGB( 0, 0, 0 ), 28.0f );
         }
 
-        void onChange( const event::Change &e ) override
+        void onChange( event::Change &e ) override
         {
             MasterClockx4 *mymodule;
 
             MSCH_Widget_Knob1::onChange( e );
 
-            mymodule = (MasterClockx4*)paramQuantity->module;
+            mymodule = (MasterClockx4*)module;
 
             if( !mymodule )
                 return;
 
             if( !mymodule->inputs[ INPUT_CHAIN ].isConnected()  )
-                mymodule->BPMChange( paramQuantity->getValue(), false );
+                mymodule->BPMChange( getValue(), false );
         }
     };
 
@@ -150,20 +150,20 @@ struct MasterClockx4 : Module
             set( DWRGB( 188, 175, 167 ), DWRGB( 0, 0, 0 ), 13.0f );
         }
 
-        void onChange( const event::Change &e ) override
+        void onChange( event::Change &e ) override
         {
             MasterClockx4 *mymodule;
             int ch;
 
             MSCH_Widget_Knob1::onChange( e );
 
-            mymodule = (MasterClockx4*)paramQuantity->module;
+            mymodule = (MasterClockx4*)module;
 
             if( !mymodule )
                 return;
 
-            ch = paramQuantity->paramId - MasterClockx4::PARAM_MULT;
-            mymodule->SetDisplayLED( ch, (int)paramQuantity->getValue() );
+            ch = paramId - MasterClockx4::PARAM_MULT;
+            mymodule->SetDisplayLED( ch, (int)getValue() );
 	    }
     };
 

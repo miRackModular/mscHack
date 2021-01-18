@@ -100,12 +100,12 @@ struct SEQ_Envelope_8 : Module
         SEQ_Envelope_8 *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (SEQ_Envelope_8*)paramQuantity->module;
+            mymodule = (SEQ_Envelope_8*)module;
 
             if( mymodule )
-                mymodule->m_pEnvelope->m_fband = paramQuantity->getValue(); 
+                mymodule->m_pEnvelope->m_fband = getValue(); 
 
 		    RoundKnob::onChange( e );
 	    }
@@ -578,13 +578,13 @@ void SEQ_Envelope_8::onReset()
     memset( m_bGateMode, 0, sizeof( m_bGateMode ) );
     memset( m_Modes, 0, sizeof( m_Modes ) );
     memset( m_Ranges, 0, sizeof( m_Ranges ) );
-    memset( m_GraphData, 0, sizeof( m_GraphData ) );
     memset( m_bHold, 0, sizeof( m_bHold ) );
 
     for( ch = 0; ch < nCHANNELS; ch++ )
     {
         m_pButtonHold[ ch ]->Set( m_bHold[ ch ] );
  
+        m_pEnvelope->resetValAll(ch, 0.5);
         m_pEnvelope->setGateMode( ch, m_bGateMode[ ch ] );
         m_pEnvelope->setMode( ch, m_Modes[ ch ] );
         m_pEnvelope->setRange( ch, m_Ranges[ ch ] );

@@ -116,19 +116,19 @@ struct Windz : Module
             set( DWRGB( 255, 255, 0 ), DWRGB( 0, 0, 0 ), 13.0f );
         }
 
-        void onChange( const event::Change &e ) override
+        void onChange( event::Change &e ) override
         {
             Windz *mymodule;
             char strVal[ 10 ] = {};
 
             MSCH_Widget_Knob1::onChange( e );
 
-            mymodule = (Windz*)paramQuantity->module;
+            mymodule = (Windz*)module;
 
             if( !mymodule )
                 return;
 
-            sprintf( strVal, "x%.2f", mymodule->speeds[ (int)paramQuantity->getValue() ] );
+            sprintf( strVal, "x%.2f", mymodule->speeds[ (int)getValue() ] );
             mymodule->m_pTextLabel2->text = strVal;
         }
     };
@@ -238,8 +238,6 @@ Windz_Widget( Windz *module )
 		}
 	}
 
-	addParam(createParam<Windz::MySpeed_Knob>( Vec( 10, 280 ), module, Windz::PARAM_SPEED ) );
-
     pmod->m_pTextLabel2 = new Label();
     pmod->m_pTextLabel2->box.pos = Vec( 30, 280 );
     pmod->m_pTextLabel2->text = "x1.00";
@@ -252,6 +250,8 @@ Windz_Widget( Windz *module )
 
     addChild(createWidget<ScrewSilver>(Vec(30, 0)));
     addChild(createWidget<ScrewSilver>(Vec(30, 365)));
+	
+	addParam(createParam<Windz::MySpeed_Knob>( Vec( 10, 280 ), module, Windz::PARAM_SPEED ) );
 
     if( module )
     {

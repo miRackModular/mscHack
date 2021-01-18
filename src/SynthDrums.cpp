@@ -121,16 +121,16 @@ struct SynthDrums : Module
         SynthDrums *mymodule;
         int param;
 
-        void onChange( const event::Change &e ) override 
+        void onChange( event::Change &e ) override 
         {
-            mymodule = (SynthDrums*)paramQuantity->module;
+            mymodule = (SynthDrums*)module;
 
             if( mymodule )
             {
-                param = paramQuantity->paramId - SynthDrums::PARAM_FREQ;
+                param = paramId - SynthDrums::PARAM_FREQ;
 
                 if( mymodule->m_Wave[ param ].wavetype == WAVE_NOISE )
-                    mymodule->ChangeFilterCutoff( param, paramQuantity->getValue() );
+                    mymodule->ChangeFilterCutoff( param, getValue() );
                 else
                     mymodule->ChangeFilterCutoff( param, 0.6 );
             }
@@ -636,9 +636,9 @@ void SynthDrums::process(const ProcessArgs &args)
     }
 
     // process sounds
-    outputs[ OUTPUT_AUDIO + 0 ].setVoltage( GetAudio( 0 ) * AUDIO_MAX * clamp( (inputs[ IN_LEVEL + 0 ].getVoltage() / CV_MAX10), 0.0f, 1.0f ) );
-    outputs[ OUTPUT_AUDIO + 1 ].setVoltage( GetAudio( 1 ) * AUDIO_MAX * clamp( (inputs[ IN_LEVEL + 1 ].getVoltage() / CV_MAX10), 0.0f, 1.0f ) );
-    outputs[ OUTPUT_AUDIO + 2 ].setVoltage( GetAudio( 2 ) * AUDIO_MAX * clamp( (inputs[ IN_LEVEL + 2 ].getVoltage() / CV_MAX10), 0.0f, 1.0f ) );
+    outputs[ OUTPUT_AUDIO + 0 ].setVoltage( GetAudio( 0 ) * AUDIO_MAX * clamp( (inputs[ IN_LEVEL + 0 ].getNormalVoltage(5.f) / CV_MAX10), 0.0f, 1.0f ) );
+    outputs[ OUTPUT_AUDIO + 1 ].setVoltage( GetAudio( 1 ) * AUDIO_MAX * clamp( (inputs[ IN_LEVEL + 1 ].getNormalVoltage(5.f) / CV_MAX10), 0.0f, 1.0f ) );
+    outputs[ OUTPUT_AUDIO + 2 ].setVoltage( GetAudio( 2 ) * AUDIO_MAX * clamp( (inputs[ IN_LEVEL + 2 ].getNormalVoltage(5.f) / CV_MAX10), 0.0f, 1.0f ) );
 }
 
 Model *modelSynthDrums = createModel<SynthDrums, SynthDrums_Widget>( "SynthDrums" );

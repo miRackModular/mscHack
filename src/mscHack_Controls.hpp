@@ -4,7 +4,7 @@
 #define DEG2RAD( x ) ( ( x ) * ( PI / 180.0f ) )
 #define RAD2DEG( x ) ( ( x ) * ( 180.0f / PI ) )
 
-/*struct CyanValueLight : ModuleLightWidget 
+struct CyanValueLight : ModuleLightWidget 
 {
 	CyanValueLight() 
     {
@@ -50,7 +50,7 @@ struct DarkYellow2ValueLight : ModuleLightWidget
     {
 		addBaseColor( nvgRGB(0x40, 0x40, 0) );;
 	}
-};*/
+};
 
 #define lvl_to_db( x ) ( 20.0 * log10( x ) )
 #define db_to_lvl( x ) ( 1.0 / pow( 10, x / 20.0 ) )
@@ -270,10 +270,10 @@ struct Widget_EnvelopeEdit : OpaqueWidget
 
     // overrides
     void draw(const DrawArgs &args) override;
-    void onButton(const event::Button &e) override;
-	void onDragStart(const event::DragStart &e) override;
-	void onDragEnd(const event::DragEnd &e) override;
-	void onDragMove(const event::DragMove &e) override;
+    void onMouseDown(event::MouseDown &e) override;
+	void onDragStart(event::DragStart &e) override;
+	void onDragEnd(event::DragEnd &e) override;
+	void onDragMove(event::DragMove &e) override;
 };
 
 //-----------------------------------------------------
@@ -458,21 +458,21 @@ struct MySimpleKnob : OpaqueWidget
     //-----------------------------------------------------
     // Procedure:   onDragStart
     //-----------------------------------------------------
-	void onDragStart(const event::DragStart &e) override
+	void onDragStart(event::DragStart &e) override
     {
     }
 
     //-----------------------------------------------------
     // Procedure:   onDragEnd
     //-----------------------------------------------------
-	void onDragEnd(const event::DragEnd &e) override
+	void onDragEnd(event::DragEnd &e) override
     {
     }
 
     //-----------------------------------------------------
     // Procedure:   onDragMove
     //-----------------------------------------------------
-	void onDragMove(const event::DragMove &e) override
+	void onDragMove(event::DragMove &e) override
     {
         m_Vecpos.x = e.mouseDelta.x;
         m_Vecpos.y = e.mouseDelta.y;
@@ -887,12 +887,14 @@ struct MyLEDButtonStrip : OpaqueWidget
     //-----------------------------------------------------
     // Procedure:   onMouseDown
     //-----------------------------------------------------
-    void onButton(const event::Button &e) override
+    void onMouseDown(event::MouseDown &e) override
     {
         int i;
         //e.consumed = false;
 
-        if( !m_bInitialized || e.button != 0 || e.action != GLFW_PRESS )
+        OpaqueWidget::onMouseDown(e);
+
+        if( !m_bInitialized || e.button != 0 )
             return;
 
         for( i = 0; i < m_nButtons; i++ )
@@ -979,6 +981,8 @@ struct MyLEDButton : OpaqueWidget
         m_Rect.y2 = h - 1;
 
         m_bInitialized = true;
+
+        canSquash = true;
     }
 
     //-----------------------------------------------------
@@ -990,6 +994,8 @@ struct MyLEDButton : OpaqueWidget
 
         if( m_Type == TYPE_MOMENTARY && bOn )
             m_StepCount = 8;//(int)( engineGetSampleRate() * 0.05 );
+
+        dirty = true;
     }
 
     //-----------------------------------------------------
@@ -1037,9 +1043,11 @@ struct MyLEDButton : OpaqueWidget
     //-----------------------------------------------------
     // Procedure:   onMouseDown
     //-----------------------------------------------------
-    void onButton(const event::Button &e) override
+    void onMouseDown(event::MouseDown &e) override
     {
-        if( !m_bInitialized || e.button != 0 || e.action != GLFW_PRESS )
+        OpaqueWidget::onMouseDown(e);
+        
+        if( !m_bInitialized || e.button != 0 )
             return;
 
         //if( isPoint( &m_Rect, (int)e.pos.x, (int)e.pos.y ) )
@@ -1061,6 +1069,8 @@ struct MyLEDButton : OpaqueWidget
                     m_pCallback( m_pClass, m_Id, m_bOn );
             }
 
+            dirty = true;
+
             //return;
         //}
 
@@ -1078,6 +1088,7 @@ struct MyLEDButton : OpaqueWidget
             {
                 m_bOn = false;
                 m_StepCount = 0;
+                dirty = true;
             }
         }
     }
@@ -1330,11 +1341,13 @@ struct SinglePatternClocked32 : OpaqueWidget
     //-----------------------------------------------------
     // Procedure:   onMouseDown
     //-----------------------------------------------------
-    void onButton(const event::Button &e) override
+    void onMouseDown(event::MouseDown &e) override
     {
         int i;
 
-        if( !m_bInitialized || e.action != GLFW_PRESS )
+        OpaqueWidget::onMouseDown(e);
+
+        if( !m_bInitialized )
             return;
 
         for( i = 0; i < m_nLEDs; i++)
@@ -1536,14 +1549,16 @@ struct PatternSelectStrip : OpaqueWidget
     //-----------------------------------------------------
     // Procedure:   onMouseDown
     //-----------------------------------------------------
-    void onButton(const event::Button &e) override
+    void onMouseDown(event::MouseDown &e) override
     {
         int i;
+
+        OpaqueWidget::onMouseDown(e);
 
         if( !m_bInitialized )
             return;
 
-        if( e.button != 0 || e.action != GLFW_PRESS )
+        if( e.button != 0 )
             return;
 
         for( i = 0; i < m_nLEDs; i++)
@@ -2028,21 +2043,21 @@ DRAW_VECT_STRUCT OctaveKeyHighC [ 1 ] =
     //-----------------------------------------------------
     // Procedure:   onMouseDown
     //-----------------------------------------------------
-    void onButton(const event::Button &e) override
+    void onMouseDown(event::MouseDown &e) override
     {
         int i;
 
-        if( !m_bInitialized || e.action != GLFW_PRESS )
-            return;
+        OpaqueWidget::onMouseDown(e);
 
-        e.consume( NULL );
+        if( !m_bInitialized )
+            return;
 
         // check black keys first they are on top
         for( i = 0; i < nKEYS; i++)
         {
             if( OctaveKeyDrawVects[ i ].nUsed == 4 && isPoint( &keyrects[ i ], (int)e.pos.x, (int)e.pos.y ) )
             {
-                addtokeylist( i, e.button, e.mods );
+                addtokeylist( i, e.button, 0 );
                 return;
             }
         }
@@ -2052,7 +2067,7 @@ DRAW_VECT_STRUCT OctaveKeyHighC [ 1 ] =
         {
             if( OctaveKeyDrawVects[ i ].nUsed != 4 && isPoint( &keyrects[ i ], (int)e.pos.x, (int)e.pos.y ) )
             {
-                addtokeylist( i, e.button, e.mods );
+                addtokeylist( i, e.button, 0 );
                 return;
             }
         }

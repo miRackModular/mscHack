@@ -6,15 +6,9 @@ void init(rack::Plugin *p)
 {
     thePlugin = p;
 
-    /*
-    p->addModel( modelSeq_3x16x16 );
-    p->addModel( modelXFade );
-    
-    
-    */
-
     p->addModel( modelCompressor );
     p->addModel( modelSynthDrums );
+    p->addModel( modelSeq_3x16x16 );
     p->addModel( modelSEQ_6x32x16 );
     p->addModel( modelMasterClockx4 );
     //p->addModel( modelMasterClockx8 );  
@@ -36,6 +30,11 @@ void init(rack::Plugin *p)
     p->addModel( modelAlienz );
     p->addModel( modelOSC_WaveMorph_3 );
     p->addModel( modelMaude_221 );
+    p->addModel( modelXFade );    
+
+    p->addModel( modelMix_1x4_Stereo );
+    p->addModel( modelMix_2x4_Stereo );
+    p->addModel( modelMix_4x4_Stereo );
 }
 
 //-----------------------------------------------------

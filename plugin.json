@@ -24,7 +24,7 @@
 
     {
       "slug": "MasterClockx4",
-      "name": "Master Clock x4",
+      "name": "Master CLOCK x4",
       "description": "4 Channel Clock",
       "tags": [
         "Clock"
@@ -42,7 +42,7 @@
 
     {
       "slug": "TriadSeq2",
-      "name": "Triad 2 Sequencer",
+      "name": "SEQ Triad 2",
       "description": "3 Channel Keyboard Sequencer",
       "tags": [
         "Sequencer"
@@ -88,8 +88,8 @@
 
     {
       "slug": "StepDelay",
-      "name": "Step Delay",
-      "description": "Step Delay",
+      "name": "4 Step Delay",
+      "description": "4 Step Delay",
       "tags": [
         "Delay"
       ]
@@ -97,7 +97,7 @@
 
     {
       "slug": "Mix_4_0_4",
-      "name": "MIX 4 Channel",
+      "name": "MIXER 4 Channels",
       "description": "4 Channel Mixer",
       "tags": [
         "Mixer"
@@ -106,7 +106,7 @@
 
     {
       "slug": "Mix_9_3_4",
-      "name": "MIX 9 Channel, 3 Groups",
+      "name": "MIXER 9 Channel, 3 Groups",
       "description": "9 Channel Mixer",
       "tags": [
         "Mixer"
@@ -115,7 +115,7 @@
 
     {
       "slug": "Mix_16_4_4",
-      "name": "MIX 16 Channel, 4 groups",
+      "name": "MIXER 16 Channels, 4 Groups",
       "description": "16 Channel Mixer",
       "tags": [
         "Mixer"
@@ -124,7 +124,7 @@
 
     {
       "slug": "Mix_24_4_4",
-      "name": "MIX 24 Channel, 4 groups",
+      "name": "MIXER 24 Channels, 4 Groups",
       "description": "24 Channel Mixer",
       "tags": [
         "Mixer"

@@ -125,16 +125,21 @@ struct MyDelayKnob : Knob_Yellow3_20_Snap
 {
     StepDelay *mymodule;
 
-    void onChange( const event::Change &e ) override 
+    MyDelayKnob()
     {
-        mymodule = (StepDelay*)paramQuantity->module;
+        smooth = false;
+    }
+
+    void onChange( event::Change &e ) override 
+    {
+        RoundKnob::onChange( e );
+
+        mymodule = (StepDelay*)module;
 
         if( mymodule )
         {
             mymodule->CalcDelays(); 
         }
-
-		RoundKnob::onChange( e );
 	}
 };
 
@@ -410,8 +415,8 @@ void StepDelay::CalcDelays( void )
 {
     int i, delay, delaysum = 0;
 
-    if( !m_bInitialized )
-        return;
+    // if( !m_bInitialized )
+    //     return;
 
     for( i = 0; i < nSTEPS; i++ )
     {

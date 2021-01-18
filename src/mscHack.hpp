@@ -31,17 +31,9 @@ bool  frand_perc( float perc );
 // module widgets
 ////////////////////
 
-/*
-
-extern Model *modelSeq_3x16x16;
-
-extern Model *modelXFade;
-
-
-*/
-
 extern Model *modelCompressor;
 extern Model *modelSynthDrums;
+extern Model *modelSeq_3x16x16;
 extern Model *modelSEQ_6x32x16;
 extern Model *modelMasterClockx8;
 extern Model *modelMasterClockx4;
@@ -63,3 +55,8 @@ extern Model *modelLorenz;
 extern Model *modelAlienz;
 extern Model *modelOSC_WaveMorph_3;
 extern Model *modelMaude_221;
+extern Model *modelXFade;
+
+extern Model *modelMix_1x4_Stereo;
+extern Model *modelMix_2x4_Stereo;
+extern Model *modelMix_4x4_Stereo;

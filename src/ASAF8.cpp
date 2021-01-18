@@ -84,11 +84,11 @@ struct ASAF8 : Module
         int param;
         char strVal[ 10 ] = {};
 
-        void onChange( const event::Change &e ) override
+        void onChange( event::Change &e ) override
         {
-            mymodule = (ASAF8*)paramQuantity->module;
+            mymodule = (ASAF8*)module;
 
-            sprintf( strVal, "[%.2fs]", paramQuantity->getValue() );
+            sprintf( strVal, "[%.2fs]", getValue() );
 
             mymodule->m_pTextLabel->text = strVal;
 
